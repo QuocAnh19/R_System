@@ -1,11 +1,3 @@
-const ICONS = {
-  "Frontend Developer": "🖥️",
-  "Backend Developer": "🛠️",
-  "AI Engineer": "🧠",
-  "Fullstack Developer": "⚡",
-  "Data Analyst": "📊",
-};
-
 export default function CareerCard({ title, selected, onClick }) {
   return (
     <button
@@ -23,7 +15,6 @@ export default function CareerCard({ title, selected, onClick }) {
       `}
     >
       <div className="flex items-start justify-between">
-        <span className="text-3xl">{ICONS[title] || "💼"}</span>
         {selected && (
           <span className="flex h-5 w-5 items-center justify-center rounded-full bg-signal-500 text-ink-950 text-xs font-bold">
             ✓

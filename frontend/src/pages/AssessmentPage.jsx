@@ -4,14 +4,17 @@ import CareerCard from "../components/CareerCard";
 import { getCareers, getSkillsByCareer } from "../services/recommendationApi";
 
 const LEARNING_STYLES = [
-  { value: "Video", label: "Video", icon: "🎬" },
-  { value: "Reading", label: "Đọc tài liệu", icon: "📖" },
-  { value: "Project Based", label: "Làm dự án", icon: "🧩" },
+  { value: "Video", label: "Video" },
+  { value: "Reading", label: "Đọc tài liệu" },
+  { value: "Project Based", label: "Làm dự án" },
 ];
+
+const DEFAULT_VISIBLE_CAREERS = 9;
 
 export default function AssessmentPage({ onGenerate }) {
   const [careers, setCareers] = useState([]);
   const [career, setCareer] = useState("");
+  const [careerSearch, setCareerSearch] = useState("");
 
   const [skillList, setSkillList] = useState([]);
   const [skills, setSkills] = useState([]);
@@ -54,6 +57,17 @@ export default function AssessmentPage({ onGenerate }) {
     );
   };
 
+  // true khi người dùng đang gõ gì đó vào ô tìm kiếm
+  const isSearching = careerSearch.trim() !== "";
+
+  // Nếu đang search -> lọc theo tên nghề (không phân biệt hoa/thường)
+  // Nếu không search -> chỉ lấy N nghề đầu tiên (DEFAULT_VISIBLE_CAREERS)
+  const filteredCareers = isSearching
+    ? careers.filter((c) =>
+        c.name.toLowerCase().includes(careerSearch.trim().toLowerCase()),
+      )
+    : careers.slice(0, DEFAULT_VISIBLE_CAREERS);
+
   const canGenerate = career !== "" && !loading;
 
   if (loading) {
@@ -77,8 +91,8 @@ export default function AssessmentPage({ onGenerate }) {
           </span>
 
           <h1 className="mt-5 font-display text-4xl sm:text-5xl font-bold leading-tight text-mist-100">
-            Lộ trình nào dành <br className="hidden sm:block" />
-            cho bạn?
+            Lộ trình nào dành cho bạn?
+            <br className="hidden sm:block" />
           </h1>
           <p className="mt-3 max-w-lg text-mist-400">
             Chọn nghề bạn muốn theo đuổi, đánh dấu kỹ năng bạn đã có — hệ thống
@@ -98,8 +112,39 @@ export default function AssessmentPage({ onGenerate }) {
           style={{ animationDelay: "80ms" }}
         >
           <SectionLabel index="01" title="Chọn nghề nghiệp" />
+
+          {/* Ô tìm kiếm nghề */}
+          <div className="mt-4 relative">
+            <input
+              type="text"
+              value={careerSearch}
+              onChange={(e) => setCareerSearch(e.target.value)}
+              placeholder="Tìm nghề nghiệp, ví dụ: Frontend, AI, Data..."
+              className="
+                w-full rounded-xl border border-ink-600 bg-ink-800/60 pl-11 pr-4 py-3
+                text-sm text-mist-100 placeholder:text-mist-400/50
+                transition-all duration-150
+                focus:outline-none focus:ring-2 focus:ring-signal-500/70 focus:border-signal-500/60
+              "
+            />
+          </div>
+
+          {!isSearching && careers.length > DEFAULT_VISIBLE_CAREERS && (
+            <p className="mt-2 text-xs text-mist-400/60">
+              Đang hiện {DEFAULT_VISIBLE_CAREERS}/{careers.length} nghề phổ biến
+              nhất. Gõ vào ô tìm kiếm để xem toàn bộ.
+            </p>
+          )}
+
+          {isSearching && (
+            <p className="mt-2 text-xs text-mist-400/60">
+              Tìm thấy {filteredCareers.length} nghề phù hợp với "
+              {careerSearch.trim()}"
+            </p>
+          )}
+
           <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {careers.map((c) => (
+            {filteredCareers.map((c) => (
               <CareerCard
                 key={c.id}
                 title={c.name}
@@ -108,6 +153,13 @@ export default function AssessmentPage({ onGenerate }) {
               />
             ))}
           </div>
+
+          {isSearching && filteredCareers.length === 0 && (
+            <p className="mt-4 text-sm text-mist-400/70 italic">
+              Không tìm thấy nghề nào khớp với từ khóa này. Hãy thử một từ khóa
+              khác.
+            </p>
+          )}
         </section>
 
         {/* Bước 2: chọn skill */}
@@ -149,7 +201,6 @@ export default function AssessmentPage({ onGenerate }) {
                       }
                     `}
                   >
-                    {selected ? "✓ " : "+ "}
                     {skill}
                   </button>
                 );
