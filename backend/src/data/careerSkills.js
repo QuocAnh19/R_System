@@ -1,22 +1,16 @@
 module.exports = {
-  "Frontend Developer": [
+  "Frontend Developer": ["HTML", "CSS", "JavaScript", "React", "Git"],
+  "Backend Developer": ["Java", "SQL", "Spring Boot", "Git", "Docker"],
+  "AI Engineer": ["Python", "SQL", "Pandas", "NumPy", "Machine Learning"],
+  "Fullstack Developer": [
     "HTML",
     "CSS",
     "JavaScript",
     "React",
-    "Git"
-  ],
-
-  "Backend Developer": [
-    "Java",
+    "NodeJS",
+    "ExpressJS",
     "SQL",
-    "Spring Boot",
     "Git",
-    "Docker"
   ],
-
-  "AI Engineer": [
-    "Python",
-    "SQL"
-  ]
+  "Data Analyst": ["SQL", "Python", "Pandas", "Excel", "Power BI"],
 };

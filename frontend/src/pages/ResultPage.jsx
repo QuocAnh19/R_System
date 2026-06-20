@@ -1,70 +1,167 @@
-import { CircularProgressbar } from "react-circular-progressbar";
-
-import "react-circular-progressbar/dist/styles.css";
-
 import RoadmapCard from "../components/RoadmapCard";
 import ScoreCircle from "../components/ScoreCircle";
 
-
 export default function ResultPage({ result, onBack }) {
+  if (!result || result.error) {
+    return (
+      <div className="min-h-screen bg-ink-950 map-grid-bg flex items-center justify-center text-mist-100 px-6">
+        <div className="max-w-md text-center animate-fade-up">
+          <span className="text-4xl">🧭</span>
+          <h1 className="mt-4 font-display text-2xl font-bold">
+            Không thể tạo lộ trình
+          </h1>
+          <p className="mt-2 text-mist-400">
+            {result?.error || "Đã có lỗi xảy ra, vui lòng thử lại."}
+          </p>
+          <button
+            onClick={onBack}
+            className="mt-6 rounded-xl border border-ink-600 bg-ink-800 px-5 py-2.5 font-medium text-mist-200 hover:border-signal-500/50 transition-colors"
+          >
+            ← Quay lại
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const {
+    career,
+    score,
+    missingSkills,
+    recommendedCourses,
+    roadmap,
+    analysis,
+  } = result;
+
+  const sortedRoadmap = [...roadmap]
+    .sort((a, b) => {
+      if (a.completed === b.completed) return a.step - b.step;
+      return a.completed ? -1 : 1;
+    })
+    .map((item, idx) => ({ ...item, step: idx + 1 }));
+
   return (
-    <div className="p-10">
-      <button onClick={onBack}>← Back</button>
+    <div className="min-h-screen bg-ink-950 map-grid-bg text-mist-100">
+      <div className="mx-auto max-w-5xl px-6 py-10 sm:py-14">
+        {/* Top bar */}
+        <div className="flex items-center justify-between animate-fade-up">
+          <button
+            onClick={onBack}
+            className="flex items-center gap-1.5 text-sm text-mist-400 hover:text-mist-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal-500/70 rounded-lg px-2 py-1 -ml-2"
+          >
+            ← Chọn lại
+          </button>
+          <span className="rounded-full border border-ink-600 bg-ink-800/60 px-3 py-1 text-xs font-mono uppercase tracking-wider text-mist-400">
+            Kết quả phân tích
+          </span>
+        </div>
 
-      <h1
-        className="
-        text-3xl
-        font-bold
-        mt-4"
-      >
-        Result
-      </h1>
-
-      <div className="w-40 h-40">
-        <ScoreCircle score={result.score} />
-      </div>
-
-      <h3 className="mt-6">Missing Skills</h3>
-
-      <ul>
-        {result.missingSkills.map((skill) => (
-          <li key={skill}>{skill}</li>
-        ))}
-      </ul>
-
-      <h3 className="mt-6">Courses</h3>
-      <ul>
-        {result.recommendedCourses.map((course) => (
-          <li key={course.title}>{course.title}</li>
-        ))}
-      </ul>
-
-      <h3 className="mt-8 font-bold text-xl">Learning Roadmap</h3>
-
-      <div className="mt-4">
-        {result.roadmap.map((item) => (
-          <RoadmapCard key={item.step} item={item} />
-        ))}
-      </div>
-
-      <div className="mt-8">
-        <h2
-          className="
-    text-xl
-    font-bold"
+        <h1
+          className="mt-4 font-display text-3xl sm:text-4xl font-bold animate-fade-up"
+          style={{ animationDelay: "60ms" }}
         >
-          Recommendation Analysis
-        </h2>
+          {career}
+        </h1>
 
-        <p
-          className="
-    mt-3
-    bg-gray-100
-    p-4
-    rounded-lg"
-        >
-          {result.analysis}
-        </p>
+        <div className="mt-10 grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8">
+          {/* Cột trái: điểm số + phân tích + khoá học */}
+          <div className="space-y-6">
+            <div
+              className="rounded-2xl border border-ink-600/60 bg-ink-800/40 p-6 flex flex-col items-center animate-fade-up"
+              style={{ animationDelay: "100ms" }}
+            >
+              <ScoreCircle score={score} />
+              <p className="mt-4 text-center text-xs text-mist-400">
+                Mức độ phù hợp với{" "}
+                <span className="text-mist-200">{career}</span>
+              </p>
+            </div>
+
+            <div
+              className="rounded-2xl border border-ink-600/60 bg-ink-800/40 p-5 animate-fade-up"
+              style={{ animationDelay: "150ms" }}
+            >
+              <h3 className="font-display font-semibold text-sm text-mist-100 flex items-center gap-2">
+                <span>📌</span> Phân tích
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-mist-400">
+                {analysis}
+              </p>
+            </div>
+
+            {missingSkills.length > 0 && (
+              <div
+                className="rounded-2xl border border-ink-600/60 bg-ink-800/40 p-5 animate-fade-up"
+                style={{ animationDelay: "200ms" }}
+              >
+                <h3 className="font-display font-semibold text-sm text-mist-100 flex items-center gap-2">
+                  <span>🎯</span> Kỹ năng cần học
+                </h3>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {missingSkills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="rounded-full border border-ember-500/30 bg-ember-500/10 px-3 py-1 text-xs font-medium text-ember-400"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {recommendedCourses.length > 0 && (
+              <div
+                className="rounded-2xl border border-ink-600/60 bg-ink-800/40 p-5 animate-fade-up"
+                style={{ animationDelay: "250ms" }}
+              >
+                <h3 className="font-display font-semibold text-sm text-mist-100 flex items-center gap-2">
+                  <span>🎓</span> Khoá học đề xuất
+                </h3>
+                <ul className="mt-3 space-y-2">
+                  {recommendedCourses.map((course) => (
+                    <li
+                      key={course.title}
+                      className="flex items-center gap-2 text-sm text-mist-300"
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full bg-signal-500/70 shrink-0" />
+                      {course.title}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+
+          {/* Cột phải: roadmap dạng đường đi */}
+          <div
+            className="rounded-2xl border border-ink-600/60 bg-ink-800/30 p-6 sm:p-8 animate-fade-up"
+            style={{ animationDelay: "180ms" }}
+          >
+            <h2 className="font-display text-lg font-semibold text-mist-100 flex items-center gap-2">
+              <span>🗺️</span> Lộ trình học
+            </h2>
+            <p className="mt-1 text-sm text-mist-400">
+              Đi theo từng trạm để hoàn thiện kỹ năng cho vị trí {career}.
+            </p>
+
+            <div className="mt-8">
+              {sortedRoadmap.length > 0 ? (
+                sortedRoadmap.map((item, idx) => (
+                  <RoadmapCard
+                    key={item.step}
+                    item={item}
+                    isLast={idx === sortedRoadmap.length - 1}
+                  />
+                ))
+              ) : (
+                <p className="text-sm text-mist-400 italic">
+                  Chưa có lộ trình học cho nghề này.
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

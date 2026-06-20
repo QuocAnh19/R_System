@@ -16,4 +16,9 @@ module.exports = [
   "Linux",
   "Git",
   "REST API",
+  "Pandas",
+  "NumPy",
+  "Machine Learning",
+  "Power BI",
+  "Excel",
 ];

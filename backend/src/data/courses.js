@@ -1,22 +1,15 @@
 module.exports = [
-  {
-    title: "HTML Basics",
-    skill: "HTML"
-  },
-  {
-    title: "React Beginner",
-    skill: "React"
-  },
-  {
-    title: "Spring Boot Beginner",
-    skill: "Spring Boot"
-  },
-  {
-    title: "Docker Fundamentals",
-    skill: "Docker"
-  },
-  {
-    title: "Python for AI",
-    skill: "Python"
-  }
+  { title: "HTML Basics", skill: "HTML" },
+  { title: "React Beginner", skill: "React" },
+  { title: "Spring Boot Beginner", skill: "Spring Boot" },
+  { title: "Docker Fundamentals", skill: "Docker" },
+  { title: "Python for AI", skill: "Python" },
+  { title: "CSS Fundamentals", skill: "CSS" },
+  { title: "JavaScript Essentials", skill: "JavaScript" },
+  { title: "Git & Version Control", skill: "Git" },
+  { title: "Java OOP Fundamentals", skill: "Java" },
+  { title: "SQL for Developers", skill: "SQL" },
+  { title: "Pandas for Data Analysis", skill: "Pandas" },
+  { title: "NumPy Crash Course", skill: "NumPy" },
+  { title: "Intro to Machine Learning", skill: "Machine Learning" },
 ];

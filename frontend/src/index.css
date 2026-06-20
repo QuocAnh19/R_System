@@ -1,1 +1,102 @@
 @import "tailwindcss";
+
+@theme {
+  /* Màu nền chính - xanh than đậm, gợi cảm giác bầu trời đêm / bản đồ điều hướng */
+  --color-ink-950: #0a0e1a;
+  --color-ink-900: #0e1424;
+  --color-ink-800: #141b30;
+  --color-ink-700: #1c2640;
+  --color-ink-600: #2a3656;
+  --color-ink-500: #44537d;
+
+  /* Accent: cyan điện - dùng cho trạng thái "đã đạt / hoàn thành" */
+  --color-signal-400: #5eead4;
+  --color-signal-500: #22d3ee;
+  --color-signal-600: #0ea5c4;
+
+  /* Accent: cam ấm - dùng cho trạng thái "cần học / còn thiếu" */
+  --color-ember-400: #fdba74;
+  --color-ember-500: #fb923c;
+  --color-ember-600: #ea580c;
+
+  --color-mist-100: #f1f5fb;
+  --color-mist-300: #c7d2e4;
+  --color-mist-400: #93a3c2;
+
+  --font-display: "Space Grotesk", "Inter", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+html {
+  background: var(--color-ink-950);
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--color-ink-950);
+  color: var(--color-mist-100);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+}
+
+/* Lưới nền dạng "bản đồ" rất mờ, tạo chiều sâu mà không gây rối mắt */
+.map-grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(147, 163, 194, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(147, 163, 194, 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Tôn trọng người dùng yêu cầu giảm hiệu ứng chuyển động */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Hiệu ứng "đường đi đang được vẽ" cho roadmap SVG */
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+.path-flow {
+  stroke-dasharray: 6 10;
+  animation: dash-flow 1.2s linear infinite;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-up {
+  animation: fade-up 0.5s ease-out both;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-ink-950);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-ink-600);
+  border-radius: 999px;
+}

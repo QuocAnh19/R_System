@@ -2,12 +2,19 @@ const careerSkills = require("../data/careerSkills");
 const courses = require("../data/courses");
 const roadmaps = require("../data/roadmaps");
 
-function generateRecommendation(careerName, userSkills) {
-  if (!careerSkills[careerName]) {
+function generateRecommendation(careerName, userSkills = []) {
+  if (!careerName || !careerSkills[careerName]) {
     return {
       error: "Career not found",
     };
   }
+
+  if (!Array.isArray(userSkills)) {
+    return {
+      error: "Invalid skills format, expected an array",
+    };
+  }
+
   const requiredSkills = careerSkills[careerName];
 
   const matchedSkills = requiredSkills.filter((skill) =>
@@ -26,7 +33,9 @@ function generateRecommendation(careerName, userSkills) {
     missingSkills.includes(course.skill),
   );
 
-  const roadmap = roadmaps[careerName].map((item) => ({
+  // Bảo vệ: nếu chưa có roadmap cho nghề này thì trả mảng rỗng thay vì crash
+  const careerRoadmap = roadmaps[careerName] || [];
+  const roadmap = careerRoadmap.map((item) => ({
     ...item,
     completed: userSkills.includes(item.skill),
   }));
@@ -38,14 +47,11 @@ function generateRecommendation(careerName, userSkills) {
     missingSkills,
     recommendedCourses,
     roadmap,
-
-    analysis: `
-    Bạn hiện đã có ${matchedSkills.length}/${requiredSkills.length}
-    kỹ năng cần thiết cho vị trí ${careerName}.
-    Bạn nên học thêm:
-    ${missingSkills.join(", ")}
-    để tăng khả năng phù hợp.
-    `,
+    analysis: `Bạn hiện đã có ${matchedSkills.length}/${requiredSkills.length} kỹ năng cần thiết cho vị trí ${careerName}. Bạn nên học thêm: ${
+      missingSkills.length > 0
+        ? missingSkills.join(", ")
+        : "không còn kỹ năng nào thiếu"
+    } để tăng khả năng phù hợp.`,
   };
 }
 
