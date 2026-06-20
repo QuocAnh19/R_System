@@ -90,7 +90,7 @@ export default function ResultPage({ result, onBack }) {
                 className="rounded-2xl border border-ink-600/60 bg-ink-800/40 p-5 animate-fade-up"
                 style={{ animationDelay: "200ms" }}
               >
-                <h3 className="font-display font-semibold text-sm text-mist-100 flex items-center gap-2"></h3>
+                <p className="mt-1 text-sm text-mist-400">Kỹ năng cần học</p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {missingSkills.map((skill) => (
                     <span
@@ -109,7 +109,10 @@ export default function ResultPage({ result, onBack }) {
                 className="rounded-2xl border border-ink-600/60 bg-ink-800/40 p-5 animate-fade-up"
                 style={{ animationDelay: "250ms" }}
               >
-                <h3 className="font-display font-semibold text-sm text-mist-100 flex items-center gap-2"></h3>
+                <p className="mt-1 text-sm text-mist-400">
+                  Khóa học được đề xuất dựa trên kỹ năng còn thiếu và lộ trình
+                  học tập.
+                </p>
                 <ul className="mt-3 space-y-2">
                   {recommendedCourses.map((course) => (
                     <li
