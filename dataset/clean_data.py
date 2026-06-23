@@ -1,20 +1,15 @@
 """
-=========================================================================
- SCRIPT (R_System)
-=========================================================================
-
 CHỨC NĂNG:
   1. Đọc job_dataset.json -> chuẩn hoá tên nghề (career), làm sạch skill
   2. Đọc Coursera.csv -> match từng skill với khóa học thật (word-boundary)
-  3. Sinh ra 5 file: careers.js, skills.js, careerSkills.js,
-     courses.js, roadmaps.js  (đúng format backend/src/data/ của project)
+  3. Sinh ra 5 file: careers.js, skills.js, careerSkills.js, courses.js, roadmaps.js
 
 CÁCH DÙNG:
   1. Đặt các file dataset cùng thư mục với script này
   2. Chạy:  python clean_data.py
   3. Kết quả nằm ngay trong thư mục 
 
-CÓ THỂ TÙY CHỈNH (xem phần CONFIG bên dưới):
+TÙY CHỈNH:
   - MIN_JOBS_PER_CAREER : số job tối thiểu để giữ 1 nghề (lọc nhiễu)
   - SKILL_FREQ_THRESHOLD: tỷ lệ % job trong nghề phải có skill đó mới giữ
   - MAX_SKILLS_PER_CAREER: số skill tối đa hiển thị cho 1 nghề
@@ -34,17 +29,14 @@ COURSERA_CSV_PATH  = "Coursera.csv"
 OUTPUT_DIR         = r"..\backend\src\data"
 #OUTPUT_DIR         = "output"
 
-MIN_JOBS_PER_CAREER   = 2     # nghề phải có >= N job mới được giữ
-SKILL_FREQ_THRESHOLD  = 0.3   # skill phải xuất hiện ở >= 30% job của nghề đó
+MIN_JOBS_PER_CAREER   = 2
+SKILL_FREQ_THRESHOLD  = 0.3
 MAX_SKILLS_PER_CAREER = 15
 MAX_COURSES_PER_SKILL = 2
 # =================================================================== #
 
 
-# ---------------------------------------------------------------------
 # PHẦN 1: ĐỌC & LÀM SẠCH job_dataset.json
-# ---------------------------------------------------------------------
-
 LEVEL_SUFFIX_PATTERNS = [
     r"\s*-\s*(Fresher|Experienced|Entry[- ]Level|Senior[- ]Level|Mid[- ]Level|Mid[- ]Senior.*)$",
     r"\s+(Intern|Trainee|Apprentice)$",
@@ -116,10 +108,7 @@ def load_and_clean_jobs(path):
     return careers_sorted, all_skills, career_skill_map
 
 
-# ---------------------------------------------------------------------
 # PHẦN 2: ĐỌC & MATCH Coursera.csv
-# ---------------------------------------------------------------------
-
 DIFFICULTY_RANK = {
     "Beginner": 1, "Conversant": 1,
     "Intermediate": 2, "Not Calibrated": 2, "Unknown": 2,
@@ -130,7 +119,7 @@ GENERIC_WORDS = {"advanced", "expert", "introduction", "awareness", "scripting",
 
 
 def normalize_text_keep_spaces(s):
-    """Chuẩn hoá: lowercase, bỏ ký tự đặc biệt (giữ #,+ vì quan trọng với C#, C++),
+    """Chuẩn hoá: lowercase, bỏ ký tự đặc biệt (giữ #,+ vì quan trọng với C#, C++,...),
     GIỮ khoảng trắng để match theo ranh giới từ, tránh lỗi 'react' khớp nhầm 'reaction'.
     """
     s = s.lower()
@@ -215,10 +204,7 @@ def match_skills_to_courses(all_skills, indexed_courses):
     return skill_courses_map, unmatched
 
 
-# ---------------------------------------------------------------------
 # PHẦN 3: SINH FILE .js
-# ---------------------------------------------------------------------
-
 def js_str(s):
     return json.dumps(s, ensure_ascii=False)
 
@@ -317,10 +303,7 @@ def write_roadmaps_js(path, careers, career_skill_map, skill_courses_map):
         f.write("\n".join(lines) + "\n")
 
 
-# ---------------------------------------------------------------------
 # MAIN
-# ---------------------------------------------------------------------
-
 def main():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 

@@ -33,7 +33,7 @@ function generateRecommendation(careerName, userSkills = []) {
     missingSkills.includes(course.skill),
   );
 
-  // Bảo vệ: nếu chưa có roadmap cho nghề này thì trả mảng rỗng thay vì crash
+  // nếu chưa có roadmap cho nghề này thì trả mảng rỗng thay vì crash
   const careerRoadmap = roadmaps[careerName] || [];
   const roadmap = careerRoadmap.map((item) => ({
     ...item,

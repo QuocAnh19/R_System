@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 
 import CareerCard from "../components/CareerCard";
@@ -209,7 +210,7 @@ export default function AssessmentPage({ onGenerate }) {
           )}
         </section>
 
-        {/* Bước 3: phong cách học */}
+        {/* Bước 3: phong cách học
         <section
           className="mt-10 animate-fade-up"
           style={{ animationDelay: "200ms" }}
@@ -237,7 +238,7 @@ export default function AssessmentPage({ onGenerate }) {
               </button>
             ))}
           </div>
-        </section>
+        </section> */}
 
         {/* CTA */}
         <div
